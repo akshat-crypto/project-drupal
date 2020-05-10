@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  pqlos:
+    image: postgres:10
+    volumes:
+      - npqlvol:/var/lib/postgres/data
+    restart: always
+    environment:
+      - POSTGRES_USER=derek
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DATABASE=pqdb
+  
+  drupos:
+    image: drupal:latest
+    volumes:
+      - ndrmodules:/var/www/html/modules
+      - ndrprofiles:/var/www/html/profiles
+      - ndrsites:/var/www/html/sites
+      - ndrthemes:/var/www/html/themes
+    restart: always
+    depends_on:
+      - pqlos
+    ports:
+      - 3000:80
+
+volumes:
+  ndrmodules:
+  ndrprofiles:
+  ndrthemes:
+  ndrsites:
+  npqlvol:
